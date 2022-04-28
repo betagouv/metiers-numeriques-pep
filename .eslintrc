@@ -1,0 +1,14 @@
+{
+  "extends": "@ivangabriele/eslint-config-typescript-base",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["/build/"],
+  "env": {
+    "browser": false,
+    "node": true
+  },
+  "rules": {
+    "consistent-return": "off"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Métiers Numériques PEP",
+  "formation": {
+    "web": {
+      "amount": 1,
+      "size": "S"
+    }
+  }
+}

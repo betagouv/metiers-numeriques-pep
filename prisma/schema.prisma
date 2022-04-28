@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id                 String   @id @default(cuid())
+  title              String
+  missionDescription String
+  teamDescription    String
+  profileDescription String?
+  slug               String   @unique
+  sourceUrl          String   @unique
+  isExpired          Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  expiredAt          DateTime
+  updatedAt          DateTime @updatedAt
+
+  profession   Profession @relation("JobProfession", fields: [professionId], references: [id])
+  professionId String
+}
+
+model Profession {
+  id   String @id @default(cuid())
+  name String @unique
+
+  Job Job[] @relation("JobProfession")
+}
