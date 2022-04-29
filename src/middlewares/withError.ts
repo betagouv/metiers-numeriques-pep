@@ -10,6 +10,7 @@ export async function withError(ctx: Context, next: Next) {
       err !== undefined && err.hasError === true
         ? err
         : {
+            code: ctx.status,
             hasError: true,
             message,
           }

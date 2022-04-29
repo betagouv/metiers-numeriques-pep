@@ -4,6 +4,8 @@ import { handleError } from '../helpers/handleError'
 
 import type { Context } from 'koa'
 
+const { npm_package_version: VERSION } = process.env
+
 export async function IndexController(ctx: Context) {
   try {
     ctx.body = {
@@ -12,12 +14,12 @@ export async function IndexController(ctx: Context) {
           {
             method: 'GET',
             path: '/offer-indexes',
-            description: 'List offer indexes.',
+            description: 'List scrapped PEP offer indexes.',
           },
           {
             method: 'GET',
             path: '/offers',
-            description: 'List offers.',
+            description: 'List scrapped PEP offers.',
           },
           {
             method: 'GET',
@@ -25,6 +27,7 @@ export async function IndexController(ctx: Context) {
             description: 'Get jobs queue status.',
           },
         ],
+        version: VERSION,
       },
       hasError: false,
     }
