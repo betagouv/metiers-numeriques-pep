@@ -4,7 +4,13 @@
 [![Build Status][img-github]][lnk-github]
 [![Code Coverage][img-codecov]][lnk-codecov]
 
-> Scrapper API for place-emploi-public.gouv.fr.
+> Scrapper and RESTful API for place-emploi-public.gouv.fr job offers.
+
+## Features
+
+- Automatically index and process new jobs
+- Provide RESTful GET routes to retrieve relatively clean data
+- Provide both sanitized HTML and Markdown sources for mission, profile and team descriptions.
 
 ## Todo
 
