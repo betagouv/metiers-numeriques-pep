@@ -4,13 +4,13 @@
 [![Build Status][img-github]][lnk-github]
 [![Code Coverage][img-codecov]][lnk-codecov]
 
-> Scrapper and RESTful API for place-emploi-public.gouv.fr job offers.
+> Scrapper and RESTful API for [place-emploi-public.gouv.fr](https://place-emploi-public.gouv.fr) job offers.
 
 ## Features
 
-- Automatically index and process new jobs
-- Provide RESTful GET routes to retrieve relatively clean data
-- Provide both sanitized HTML and Markdown sources for mission, profile and team descriptions.
+- Automatically index and process new job offers
+- Provide RESTful GET routes to fetch relatively clean JSON data
+- Provide both sanitized HTML and Markdown sources for mission, profile and team descriptions
 
 ## Todo
 
@@ -20,9 +20,9 @@ since neither `bull` nor `jest-workers` support it:
 - <https://github.com/facebook/jest/issues/12274>
 - <https://github.com/OptimalBits/bull/pull/2341>
 
-A solution could be to use Typscript (thus ESM) and use rollup to bundle it as CommonJS (via `.cjs` extensions)
+A solution could be to use Typscript (thus ESM) and use `rollup` to bundle it as CommonJS (via `.cjs` extensions)
 meanwhile `jest-workers` [ESM-compatibility PR is in progress](https://github.com/facebook/jest/pull/12680)
-and apparently planned to be released with `jest@19`).
+and apparently planned to be released with `jest@19`.
 
 ## Contributing
 
