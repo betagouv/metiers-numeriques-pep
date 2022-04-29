@@ -3,11 +3,13 @@
 # Exit when any command fails:
 set -e
 
-# Load .env file
-export $(egrep -v '^#' ./.env | xargs) > /dev/null
-
 if [ "${NODE_ENV}" != 'production' ] || [ -z "${CI}" ]; then
   exit 0
+fi
+
+# Load .env file
+if [ "${NODE_ENV}" != 'production' ]; then
+  export $(egrep -v '^#' ./.env | xargs) > /dev/null
 fi
 
 yarn prisma generate
