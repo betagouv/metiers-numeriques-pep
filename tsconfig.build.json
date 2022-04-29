@@ -1,0 +1,10 @@
+{
+  "extends": ".",
+  "compilerOptions": {
+    "outDir": "./build",
+    "sourceMap": false,
+    "rootDir": "./src"
+  },
+  "exclude": ["build/*", "node_modules/*", "**/*.test.ts"],
+  "include": ["src/**/*.ts"]
+}

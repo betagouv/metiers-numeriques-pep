@@ -4,6 +4,14 @@
     "web": {
       "amount": 1,
       "size": "S"
+    },
+    "cron": {
+      "amount": 1,
+      "size": "S"
+    },
+    "worker": {
+      "amount": 1,
+      "size": "S"
     }
   }
 }

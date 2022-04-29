@@ -1,8 +1,5 @@
 {
   "extends": "@ivangabriele/tsconfig-node",
-  "compilerOptions": {
-    "outDir": "./build"
-  },
   "exclude": ["build/*", "node_modules/*"],
   "include": ["**/*.js", "**/*.ts"]
 }

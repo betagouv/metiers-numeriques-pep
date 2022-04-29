@@ -54,6 +54,7 @@ It will also watch for file changes to rebuild + restart the server after each c
 config/             # Various configuration and setup files
 prisma/             # Prisma ORM schema, migrations and seeds
 src/                # Main code base
+scripts/            # Scripts code base
 ```
 
 ### Stack

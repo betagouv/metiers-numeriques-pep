@@ -10,26 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Job {
-  id                 String   @id @default(cuid())
-  title              String
-  missionDescription String
-  teamDescription    String
-  profileDescription String?
-  slug               String   @unique
-  sourceUrl          String   @unique
-  isExpired          Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  expiredAt          DateTime
-  updatedAt          DateTime @updatedAt
+model Offer {
+  id    String @id @default(cuid())
+  title String
 
-  profession   Profession @relation("JobProfession", fields: [professionId], references: [id])
-  professionId String
+  address            Json?
+  expiredAt          DateTime
+  isExpired          Boolean  @default(false)
+  missionDescription String
+  professionLabel    String
+  profileDescription String?
+  recruiterName      String
+  sourceUrl          String   @unique
+  teamDescription    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Profession {
-  id   String @id @default(cuid())
-  name String @unique
+model OfferIndex {
+  id String @id @default(cuid())
 
-  Job Job[] @relation("JobProfession")
+  sourceUrl String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
