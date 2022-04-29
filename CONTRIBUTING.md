@@ -5,6 +5,7 @@
   - [First Setup](#first-setup)
   - [Local development](#local-development)
   - [Main directories](#main-directories)
+  - [Architecture](#architecture)
   - [Stack](#stack)
 - [Deployment](#deployment)
 - [Common Tasks](#common-tasks)
@@ -57,12 +58,25 @@ src/                # Main code base
 scripts/            # Scripts code base
 ```
 
+### Architecture
+
+There are 3 parts:
+
+- The cron (`src/cron.ts`) automatically adding new jobs to run into the queue.
+- The server (`src/server.ts`) providing the RESTfull API.
+- The worker (`src/worker.cjs`) provifing the workers running scrapping and processing jobs via a queue.
+  _This name would deserve to be changed to something more description-fitting._
+
 ### Stack
 
-It's a full Typescript application (for both backend & frontend code).
+It's a mixed Typescript / CommonJS application (check [main readme Todo](README.md#todo) to understand why):
 
-- The WebApp & API are under [Next.js](https://nextjs.org) framework.
-- The database is a PostgreSQL one managed through [Prisma](https://www.prisma.io) ORM (including migrations & seeds).
+- The cron are run via the popular [cron](https://www.npmjs.com/package/cron) package.
+- The worker handles the job queue via [bull](https://optimalbits.github.io/bull/)
+  and the parallel forked process via [jest-worker](https://www.npmjs.com/package/jest-worker).
+- The server runs via [koa](https://koajs.com) framework (quite similar to [express](https://expressjs.com),
+  but [way lighter](https://github.com/koajs/koa/blob/master/docs/koa-vs-express.md#koa-vs-express)).
+- The database is a PostgreSQL one managed via [Prisma](https://www.prisma.io) ORM (including migrations & seeds).
 
 ## Deployment
 
@@ -99,9 +113,6 @@ And don't forget to restart your local instance in order for Prisma to load the 
   "eslint.codeActionsOnSave.mode": "all",
   "eslint.format.enable": true,
   "eslint.packageManager": "yarn",
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
