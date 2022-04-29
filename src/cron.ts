@@ -25,8 +25,8 @@ const commonCronJobOptions: Partial<CronJobParameters> = {
 
 const newPepOffersIndexingCronJob = new CronJob({
   ...commonCronJobOptions,
-  // At every 20th minute
-  cronTime: '*/20 * * * *',
+  // At every minute
+  cronTime: '* * * * *',
   onTick: async () => {
     B.info(`[${SCRIPT_PATH}] Adding ${JobType.INDEX_NEW_PEP_OFFERS} job...`)
 

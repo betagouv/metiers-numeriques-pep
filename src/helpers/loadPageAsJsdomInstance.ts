@@ -1,11 +1,9 @@
-import { load } from 'cheerio'
 import got, { TimeoutError } from 'got'
-
-import type { CheerioAPI } from 'cheerio'
+import { JSDOM } from 'jsdom'
 
 const MAX_RETRIES_COUNT = 5
 
-export async function loadPageAsCheerioInstance(path: string, retriesCount = 1): Promise<CheerioAPI> {
+export async function loadPageAsJsdomInstance(path: string, retriesCount = 1): Promise<JSDOM> {
   try {
     const response = await got.get(path, {
       retry: {
@@ -13,16 +11,16 @@ export async function loadPageAsCheerioInstance(path: string, retriesCount = 1):
       },
     })
     const sourceAsHtml = response.body
-    const $root = load(sourceAsHtml)
+    const jsdom = new JSDOM(sourceAsHtml)
 
-    return $root
+    return jsdom
   } catch (err) {
     if (err instanceof TimeoutError) {
       if (retriesCount === MAX_RETRIES_COUNT) {
         throw err
       }
 
-      return loadPageAsCheerioInstance(path, retriesCount + 1)
+      return loadPageAsJsdomInstance(path, retriesCount + 1)
     }
 
     return undefined as never
