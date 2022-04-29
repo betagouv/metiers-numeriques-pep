@@ -1,7 +1,10 @@
+/* eslint-disable no-await-in-loop */
+
 import { B } from 'bhala'
 
 import { handleError } from '../helpers/handleError'
 import { loadPageAsCheerioInstance } from '../helpers/loadPageAsCheerioInstance'
+import { logMemoryUsage } from '../helpers/logMemoryUsage'
 import { prisma } from '../libs/prisma'
 
 import type { Job } from 'bull'
@@ -19,7 +22,11 @@ export async function indexNewPepOffers(job: Job, pageIndex: number = 0): Promis
     const pageNumber = pageIndex + 1
 
     const $root = await loadPageAsCheerioInstance(`${BASE_URL}/nos-offres/filtres/domaine/3522/page/${pageNumber}`)
+    logMemoryUsage(SCRIPT_PATH, 'After `$root` assignment.')
+
     const cheerioOfferList = $root('.js-results .fr-grid-row .card.card--offer')
+    logMemoryUsage(SCRIPT_PATH, 'After `cheerioOfferList` assignment.')
+
     const cheerioOfferListLength = cheerioOfferList.length
 
     for (let index = 0; index < cheerioOfferList.length; index += 1) {
@@ -28,22 +35,22 @@ export async function indexNewPepOffers(job: Job, pageIndex: number = 0): Promis
       )
 
       const sourceUrl = (selectInOfferCard($root, index, 'h3 a').attr('href') as string).trim()
+      logMemoryUsage(SCRIPT_PATH, 'After `sourceUrl` assignment.')
+
       if (sourceUrl === undefined) {
         B.error(`[${SCRIPT_PATH}] \`sourceUrl\` is undefined.`)
-        job.progress(progressPercentage)
+        await job.progress(progressPercentage)
 
         // eslint-disable-next-line no-continue
         continue
       }
 
-      // eslint-disable-next-line no-await-in-loop
       const count = await prisma.offerIndex.count({
         where: {
           sourceUrl,
         },
       })
       if (count === 0) {
-        // eslint-disable-next-line no-await-in-loop
         await prisma.offerIndex.create({
           data: {
             sourceUrl,
@@ -51,7 +58,7 @@ export async function indexNewPepOffers(job: Job, pageIndex: number = 0): Promis
         })
       }
 
-      job.progress(progressPercentage)
+      await job.progress(progressPercentage)
     }
 
     if (pageNumber === MAX_PAGE_NUMBER) {
