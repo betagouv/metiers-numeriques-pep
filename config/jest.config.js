@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-default-export
 export default {
   clearMocks: true,
-  collectCoverageFrom: ['<rootDir>/src/{helpers,libs}/**/*.ts'],
+  collectCoverageFrom: ['<rootDir>/src/{helpers,libs}/**/*.cjs', '<rootDir>/src/{helpers,libs}/**/*.ts'],
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.json',

@@ -1,5 +1,6 @@
-/* eslint-disable no-await-in-loop */
+/* eslint-disable no-await-in-loop, no-continue */
 
+const { handleError } = require('../helpers/handleError.cjs')
 const { loadPageAsJsdomInstance } = require('../helpers/loadPageAsJsdomInstance.cjs')
 const { logMemoryUsage } = require('../helpers/logMemoryUsage.cjs')
 const { prisma } = require('../libs/prisma.cjs')
@@ -17,7 +18,7 @@ const SCRIPT_PATH = 'jobs/indexNewPepOffers()'
 const selectInOfferCard = (jsdom, index, selector) =>
   jsdom.window.document.querySelector(`.fr-grid-row .fr-col-12:nth-child(${index + 1}) .card.card--offer ${selector}`)
 
-module.exports.indexNewPepOffers = async () => {
+async function indexNewPepOffers() {
   try {
     const jsdom = await loadPageAsJsdomInstance(`${BASE_URL}/nos-offres/filtres/domaine/3522/page/1`)
 
@@ -46,7 +47,6 @@ module.exports.indexNewPepOffers = async () => {
         console.error(`[${SCRIPT_PATH}] \`sourceUrl\` is undefined.`)
         // await job.progress(progressPercentage)
 
-        // eslint-disable-next-line no-continue
         continue
       }
 
@@ -70,9 +70,8 @@ module.exports.indexNewPepOffers = async () => {
 
     logMemoryUsage(SCRIPT_PATH)
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(`❌ ${SCRIPT_PATH} ${err}`)
-    // eslint-disable-next-line no-console
-    console.error(err)
+    handleError(err, SCRIPT_PATH)
   }
 }
+
+module.exports = { indexNewPepOffers }

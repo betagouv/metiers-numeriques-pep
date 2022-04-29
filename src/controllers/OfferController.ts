@@ -7,9 +7,9 @@ import { prisma } from '../libs/prisma'
 
 import type { Context } from 'koa'
 
-export const OfferIndexController = {
+export const OfferController = {
   list: async (ctx: Context) => {
-    const SCRIPT_PATH = 'controllers/OfferIndexController.list()'
+    const SCRIPT_PATH = 'controllers/OfferController.list()'
 
     try {
       const { pageIndex, perPage } = ctx.query
@@ -21,7 +21,7 @@ export const OfferIndexController = {
       }
 
       const paginationFilter = buildPrismaPaginationFilter(Number(perPage), Number(pageIndex))
-      const offerIndexes = await prisma.offerIndex.findMany({
+      const offerIndexes = await prisma.offer.findMany({
         orderBy: {
           updatedAt: 'asc',
         },

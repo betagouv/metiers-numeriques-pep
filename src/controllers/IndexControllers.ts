@@ -11,8 +11,13 @@ export async function IndexController(ctx: Context) {
         routes: [
           {
             method: 'GET',
-            path: '/offer-index',
+            path: '/offer-indexes',
             description: 'List offer indexes.',
+          },
+          {
+            method: 'GET',
+            path: '/offers',
+            description: 'List offers.',
           },
           {
             method: 'GET',

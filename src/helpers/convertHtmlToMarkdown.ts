@@ -3,6 +3,7 @@ import rehypeRemark from 'rehype-remark'
 import remarkStringify from 'remark-stringify'
 import { unified } from 'unified'
 
+// TODO rehype-* is ESM-only so it can't be used within CommonJS. Solution: Using rollup?
 export function convertHtmlToMarkdown(htmlSource: string): string {
   const markdownSource = unified()
     .use(rehypeParse)

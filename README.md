@@ -6,6 +6,18 @@
 
 > Scrapper API for place-emploi-public.gouv.fr.
 
+## Todo
+
+There is a serious **developpement-related** issue forcing us to use CommonJS instead of ESM for workers
+since neither `bull` nor `jest-workers` support it:
+
+- <https://github.com/facebook/jest/issues/12274>
+- <https://github.com/OptimalBits/bull/pull/2341>
+
+A solution could be to use Typscript (thus ESM) and use rollup to bundle it as CommonJS (via `.cjs` extensions)
+meanwhile `jest-workers` [ESM-compatibility PR is in progress](https://github.com/facebook/jest/pull/12680)
+and apparently planned to be released with `jest@19`).
+
 ## Contributing
 
 You're a developer and want to either run the app locally or help us improve this application?

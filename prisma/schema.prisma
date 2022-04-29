@@ -10,19 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum OfferIndexStatus {
+  PENDING
+  PROCESSING
+  PROCESSED
+}
+
 model Offer {
   id    String @id @default(cuid())
   title String
 
-  address            Json?
-  expiredAt          DateTime
-  isExpired          Boolean  @default(false)
-  missionDescription String
-  professionLabel    String
-  profileDescription String?
-  recruiterName      String
-  sourceUrl          String   @unique
-  teamDescription    String
+  address                      Json?
+  expiredAt                    DateTime
+  isExpired                    Boolean  @default(false)
+  missionDescriptionAsHtml     String
+  missionDescriptionAsMarkdown String
+  professionLabel              String
+  profileDescriptionAsHtml     String?
+  profileDescriptionAsMarkdown String?
+  recruiterName                String
+  sourceUrl                    String   @unique
+  teamDescriptionAsHtml        String
+  teamDescriptionAsMarkdown    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,7 +40,8 @@ model Offer {
 model OfferIndex {
   id String @id @default(cuid())
 
-  sourceUrl String @unique
+  sourceUrl String           @unique
+  status    OfferIndexStatus @default(PENDING)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

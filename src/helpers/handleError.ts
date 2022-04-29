@@ -1,7 +1,8 @@
 import { B } from 'bhala'
-import { Context } from 'koa'
 
 import { ApiError } from '../libs/ApiError'
+
+import type { Context } from 'koa'
 
 const getErrorConstructorName = (error: any) => {
   if (error === undefined || error.constructor === undefined) {

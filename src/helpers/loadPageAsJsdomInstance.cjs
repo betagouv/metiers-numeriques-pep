@@ -7,7 +7,7 @@ const MAX_RETRIES_COUNT = 5
  * @param {string} url
  * @param {number=} retriesCount
  *
- * @returns {import('jsdom').JSDOM}
+ * @returns {Promise<import('jsdom').JSDOM>}
  */
 async function loadPageAsJsdomInstance(url, retriesCount = 1) {
   try {
