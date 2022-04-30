@@ -1,12 +1,7 @@
 // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention
-const _sanitizeHtml = require('sanitize-html')
+import _sanitizeHtml from 'sanitize-html'
 
-/**
- * @param {string} htmlSource
- *
- * @returns {string}
- */
-function sanitizeHtml(htmlSource) {
+export function sanitizeHtml(htmlSource: string): string {
   const sanitizedHtml = _sanitizeHtml(htmlSource, {
     allowedAttributes: {
       a: ['href'],
@@ -20,5 +15,3 @@ function sanitizeHtml(htmlSource) {
     .replace(/\s+/g, ' ')
     .trim()
 }
-
-module.exports = { sanitizeHtml }

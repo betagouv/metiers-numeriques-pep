@@ -1,13 +1,13 @@
-const dayjs = require('dayjs')
+import dayjs from 'dayjs'
 
-const { sanitizeText } = require('./sanitizeText.cjs')
+import { sanitizeText } from './sanitizeText'
 
 /**
  * @param {import('jsdom').JSDOM} jsdom
  *
  * @returns {Date}
  */
-function extractPepOfferExpiredAt(jsdom) {
+export function extractPepOfferExpiredAt(jsdom) {
   const expiredAtFallback = dayjs().add(2, 'months').startOf('day').toDate()
 
   const $expiredAt = jsdom.window.document.querySelector('.ic.ic--info.fr-text--sm.tl-color--blue.fr-mb-0.fr-mt-2w')
@@ -30,5 +30,3 @@ function extractPepOfferExpiredAt(jsdom) {
 
   return expiredAtFallback
 }
-
-module.exports = { extractPepOfferExpiredAt }

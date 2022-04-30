@@ -2,8 +2,6 @@ import got from 'got'
 
 import { handleError } from './handleError'
 
-import type { PrismaClient } from '@prisma/client'
-
 /**
  * @see https://adresse.data.gouv.fr/api-doc/adresse
  * @see https://github.com/geocoders/geocodejson-spec/tree/master/draft
@@ -59,10 +57,7 @@ interface GeocodeJsonFeature {
   type: 'Feature'
 }
 
-export async function getBanAddressFromPepAddress(
-  prisma: PrismaClient,
-  pepAddress: string,
-): Promise<GeocodeJsonFeature | undefined> {
+export async function getBanAddressFromPepAddress(pepAddress: string): Promise<GeocodeJsonFeature | undefined> {
   try {
     const searchParams = {
       q: pepAddress,

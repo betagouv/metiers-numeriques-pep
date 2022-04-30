@@ -1,8 +1,8 @@
-const Bull = require('bull')
-const { Worker } = require('jest-worker')
+import Bull from 'bull'
+import { Worker } from 'jest-worker'
 
-const { JobType } = require('./constants.cjs')
-const { logJob } = require('./helpers/logJob.cjs')
+import { JobType } from './constants'
+import { logJob } from './helpers/logJob'
 
 const { REDIS_URL } = process.env
 if (REDIS_URL === undefined) {
@@ -23,7 +23,9 @@ const newPepOffersIndexingWorker = new Worker(require.resolve('./jobs/indexNewPe
     silent: true,
   },
   numWorkers: 1,
-})
+}) as Worker & {
+  indexNewPepOffers(): Promise<void>
+}
 newPepOffersIndexingWorker.getStdout().on('data', data => process.stdout.write(data))
 newPepOffersIndexingWorker.getStderr().on('data', data => process.stderr.write(data))
 
@@ -33,7 +35,9 @@ const newPepOfferProcessingWorker = new Worker(require.resolve('./jobs/processNe
     silent: true,
   },
   numWorkers: 1,
-})
+}) as Worker & {
+  processNewPepOffer(): Promise<void>
+}
 newPepOfferProcessingWorker.getStdout().on('data', data => process.stdout.write(data))
 newPepOfferProcessingWorker.getStderr().on('data', data => process.stderr.write(data))
 

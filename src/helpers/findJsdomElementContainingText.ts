@@ -1,4 +1,4 @@
-const { handleError } = require('./handleError.cjs')
+import { handleError } from './handleError'
 
 /**
  * @param {import('jsdom').JSDOM} jsdom
@@ -7,7 +7,7 @@ const { handleError } = require('./handleError.cjs')
  *
  * @returns {Node | null}
  */
-function findJsdomElementContainingText(jsdom, tag, text) {
+export function findJsdomElementContainingText(jsdom, tag, text) {
   try {
     return jsdom.window.document.evaluate(
       `//${tag}[text()='${text}']`,
@@ -22,5 +22,3 @@ function findJsdomElementContainingText(jsdom, tag, text) {
     return null
   }
 }
-
-module.exports = { findJsdomElementContainingText }

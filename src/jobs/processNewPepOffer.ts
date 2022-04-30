@@ -1,22 +1,24 @@
 /* eslint-disable no-await-in-loop, no-continue */
 
-const { OfferIndexStatus } = require('@prisma/client')
+import { OfferIndexStatus } from '@prisma/client'
 
-const { convertHtmlToMarkdown } = require('../helpers/convertHtmlToMarkdown.cjs')
-const { extractPepChapterFromMainContent } = require('../helpers/extractPepChapterFromMainContent.cjs')
-const { extractPepOfferExpiredAt } = require('../helpers/extractPepOfferExpiredAt.cjs')
-const { findJsdomElementContainingText } = require('../helpers/findJsdomElementContainingText.cjs')
-const { getBanAddressFromPepAddress } = require('../helpers/getBanAddressFromPepAddress.cjs')
-const { handleError } = require('../helpers/handleError.cjs')
-const { loadPageAsJsdomInstance } = require('../helpers/loadPageAsJsdomInstance.cjs')
-const { logMemoryUsage } = require('../helpers/logMemoryUsage.cjs')
-const { sanitizeHtml } = require('../helpers/sanitizeHtml.cjs')
-const { sanitizeText } = require('../helpers/sanitizeText.cjs')
-const { prisma } = require('../libs/prisma.cjs')
+import { convertHtmlToMarkdown } from '../helpers/convertHtmlToMarkdown'
+import { extractPepChapterFromMainContent } from '../helpers/extractPepChapterFromMainContent'
+import { extractPepOfferExpiredAt } from '../helpers/extractPepOfferExpiredAt'
+import { findJsdomElementContainingText } from '../helpers/findJsdomElementContainingText'
+import { getBanAddressFromPepAddress } from '../helpers/getBanAddressFromPepAddress'
+import { handleError } from '../helpers/handleError'
+import { loadPageAsJsdomInstance } from '../helpers/loadPageAsJsdomInstance'
+import { logMemoryUsage } from '../helpers/logMemoryUsage'
+import { sanitizeHtml } from '../helpers/sanitizeHtml'
+import { sanitizeText } from '../helpers/sanitizeText'
+import { prisma } from '../libs/prisma'
+
+import type { Prisma } from '@prisma/client'
 
 const SCRIPT_PATH = 'jobs/processNewPepOffer()'
 
-async function processNewPepOffer() {
+export async function processNewPepOffer() {
   try {
     const pendingOfferIndex = await prisma.offerIndex.findFirst({
       where: {
@@ -40,14 +42,14 @@ async function processNewPepOffer() {
     })
 
     /** @type {import('@prisma/client').Offer} */
-    const newOffer = {
+    const newOffer: Partial<Prisma.OfferCreateInput> = {
       sourceUrl: pendingOfferIndex.sourceUrl,
     }
 
-    const jsdom = await loadPageAsJsdomInstance(newOffer.sourceUrl)
+    const jsdom = await loadPageAsJsdomInstance(newOffer.sourceUrl as string)
 
     const $title = jsdom.window.document.querySelector('h1')
-    if ($title === null) {
+    if ($title === null || $title.textContent === null) {
       throw new Error(`Unable to find title at ${newOffer.sourceUrl}.`)
     }
     newOffer.title = sanitizeText($title.textContent)
@@ -110,12 +112,12 @@ async function processNewPepOffer() {
       const address = await getBanAddressFromPepAddress($address.textContent)
 
       if (address !== undefined) {
-        newOffer.address = address
+        newOffer.address = address as unknown as Prisma.InputJsonObject
       }
     }
 
     await prisma.offer.create({
-      data: newOffer,
+      data: newOffer as Prisma.OfferCreateInput,
     })
 
     await prisma.offerIndex.update({
@@ -134,5 +136,3 @@ async function processNewPepOffer() {
     handleError(err, SCRIPT_PATH)
   }
 }
-
-module.exports = { processNewPepOffer }
