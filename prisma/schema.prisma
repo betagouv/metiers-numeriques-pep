@@ -30,8 +30,8 @@ model Offer {
   profileDescriptionAsMarkdown String?
   recruiterName                String
   sourceUrl                    String   @unique
-  teamDescriptionAsHtml        String
-  teamDescriptionAsMarkdown    String
+  teamDescriptionAsHtml        String?
+  teamDescriptionAsMarkdown    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

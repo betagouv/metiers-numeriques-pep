@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop, no-continue */
 
 import { OfferIndexStatus } from '@prisma/client'
+import { B } from 'bhala'
 
 import { convertHtmlToMarkdown } from '../helpers/convertHtmlToMarkdown'
 import { extractPepChapterFromMainContent } from '../helpers/extractPepChapterFromMainContent'
@@ -26,8 +27,7 @@ export async function processNewPepOffer() {
       },
     })
     if (pendingOfferIndex === null) {
-      // eslint-disable-next-line no-console
-      console.info(`[${SCRIPT_PATH}] ℹ️ No Offer Index to process.`)
+      B.info(`[${SCRIPT_PATH}] ℹ️ No Offer Index to process.`)
 
       return
     }
@@ -82,12 +82,11 @@ export async function processNewPepOffer() {
     }
 
     const $teamDescriptionTitle = findJsdomElementContainingText(jsdom, 'h2', 'Qui sommes nous ?')
-    if ($teamDescriptionTitle === null || $teamDescriptionTitle.parentElement.nextElementSibling === null) {
-      throw new Error(`Unable to find team description at ${newOffer.sourceUrl}.`)
+    if ($teamDescriptionTitle !== null && $teamDescriptionTitle.parentElement.nextElementSibling !== null) {
+      const teamDescriptionAsHtml = $teamDescriptionTitle.parentElement.nextElementSibling.innerHTML.trim()
+      newOffer.teamDescriptionAsHtml = sanitizeHtml(teamDescriptionAsHtml)
+      newOffer.teamDescriptionAsMarkdown = convertHtmlToMarkdown(newOffer.teamDescriptionAsHtml)
     }
-    const teamDescriptionAsHtml = $teamDescriptionTitle.parentElement.nextElementSibling.innerHTML.trim()
-    newOffer.teamDescriptionAsHtml = sanitizeHtml(teamDescriptionAsHtml)
-    newOffer.teamDescriptionAsMarkdown = convertHtmlToMarkdown(newOffer.teamDescriptionAsHtml)
 
     const $pepProfession = findJsdomElementContainingText(jsdom, 'button', 'Métier référence')
     if (
