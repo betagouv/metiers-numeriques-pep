@@ -20,7 +20,7 @@ since neither `bull` nor `jest-workers` support it:
 - <https://github.com/facebook/jest/issues/12274>
 - <https://github.com/OptimalBits/bull/pull/2341>
 
-A solution could be to use Typscript (thus ESM) and use `rollup` to bundle it as CommonJS (via `.cjs` extensions)
+We use `rollup` to bundle it as CommonJS (via `.cjs` extensions since it's a pure ESM package)
 meanwhile `jest-workers` [ESM-compatibility PR is in progress](https://github.com/facebook/jest/pull/12680)
 and apparently planned to be released with `jest@19`.
 
