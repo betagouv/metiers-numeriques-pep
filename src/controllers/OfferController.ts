@@ -21,15 +21,15 @@ export const OfferController = {
       }
 
       const paginationFilter = buildPrismaPaginationFilter(Number(perPage), Number(pageIndex))
-      const offerIndexes = await prisma.offer.findMany({
+      const offers = await prisma.offer.findMany({
         orderBy: {
-          updatedAt: 'asc',
+          updatedAt: 'desc',
         },
         ...paginationFilter,
       })
 
       ctx.body = {
-        data: offerIndexes,
+        data: offers,
         hasError: false,
       }
     } catch (err) {

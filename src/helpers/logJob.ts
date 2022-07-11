@@ -23,7 +23,7 @@ export function logJob(jobId: JobId, jobStatus: JobStatus, jobType: JobType): vo
       break
 
     case 'waiting':
-      B.info(`ℹ️ ${prefix} queued.`)
+      B.info(`${prefix} queued.`)
       break
 
     default:

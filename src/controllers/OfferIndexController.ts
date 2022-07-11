@@ -23,7 +23,7 @@ export const OfferIndexController = {
       const paginationFilter = buildPrismaPaginationFilter(Number(perPage), Number(pageIndex))
       const offerIndexes = await prisma.offerIndex.findMany({
         orderBy: {
-          updatedAt: 'asc',
+          updatedAt: 'desc',
         },
         ...paginationFilter,
       })
