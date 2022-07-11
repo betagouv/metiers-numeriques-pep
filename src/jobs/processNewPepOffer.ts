@@ -2,6 +2,8 @@
 
 import { OfferIndexStatus } from '@prisma/client'
 import { B } from 'bhala'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 import { convertHtmlToMarkdown } from '../helpers/convertHtmlToMarkdown'
 import { extractPepChapterFromMainContent } from '../helpers/extractPepChapterFromMainContent'
@@ -19,13 +21,26 @@ import type { Prisma } from '@prisma/client'
 
 const SCRIPT_PATH = 'jobs/processNewPepOffer()'
 
+{
+  const nodePath = path.resolve(process.argv[1])
+  const modulePath = path.resolve(fileURLToPath(import.meta.url))
+  process.env.IS_CLI = String(nodePath === modulePath)
+}
+
 export async function processNewPepOffer() {
   try {
-    const pendingOfferIndex = await prisma.offerIndex.findFirst({
-      where: {
-        status: OfferIndexStatus.PENDING,
-      },
-    })
+    const pendingOfferIndex =
+      process.env.IS_CLI === 'true'
+        ? await prisma.offerIndex.findFirst({
+            where: {
+              sourceUrl: process.argv[2],
+            },
+          })
+        : await prisma.offerIndex.findFirst({
+            where: {
+              status: OfferIndexStatus.PENDING,
+            },
+          })
     if (pendingOfferIndex === null) {
       B.info(`[${SCRIPT_PATH}] ℹ️ No Offer Index to process.`)
 
@@ -88,7 +103,7 @@ export async function processNewPepOffer() {
       newOffer.teamDescriptionAsMarkdown = convertHtmlToMarkdown(newOffer.teamDescriptionAsHtml)
     }
 
-    const $pepProfession = findJsdomElementContainingText(jsdom, 'button', 'Métier référence')
+    const $pepProfession = findJsdomElementContainingText(jsdom, 'button', 'Métier de référence')
     if (
       $pepProfession === null ||
       $pepProfession.parentElement.nextElementSibling === null ||
@@ -134,4 +149,8 @@ export async function processNewPepOffer() {
   } catch (err) {
     handleError(err, SCRIPT_PATH)
   }
+}
+
+if (process.env.IS_CLI === 'true') {
+  processNewPepOffer()
 }
